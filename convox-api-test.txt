@@ -1,0 +1,37 @@
+curl -i \
+  -H 'rack: wt/citationapi-playground' \
+  -H 'Authorization: Basic Y29udm94OjliMGRjY2U1LTIwZTEtNDkzNC04NWJmLTgzZDgwMzEyN2M1NA==' \
+  -X POST \
+  'https://console.convox.com/apps/subscription-api-69/builds?url=https://63b0921f8ec8675a3747583eb8a6af5bf34bda6e@github.com/easybib/subscription-api.git#1051f9445f77bf893cc8e84ab69f83987cd7b5f6&manifest=docker-compose.yml&app=subscription-api-69'
+
+curl -i \
+  -H 'rack: wt/easybib-playground' \
+  -H 'Authorization: Basic Y29udm94OjliMGRjY2U1LTIwZTEtNDkzNC04NWJmLTgzZDgwMzEyN2M1NA==' \
+  -X POST \
+  'https://console.convox.com/apps/citations-frontend-340/builds?url=object://citations-frontend-340/legacy.tgz&manifest=docker-compose.yml'
+
+curl -i \
+  -H 'rack: playground' \
+  -H 'Authorization: Basic <REDACTED>' \
+  -X POST \
+  -d @legacy.tgz \
+  https://console.convox.com/apps/<app_name>/objects/legacy.tgz
+
+- download
+- tar -czf legacy.tgz -C easybib-citations-frontend-a55519b235785c03397a210a8f818179f811c18c/ .
+- curl -i -H 'rack: wt/citationapi-playground'   -H 'Authorization: Basic Y29udm94OjliMGRjY2U1LTIwZTEtNDkzNC04NWJmLTgzZDgwMzEyN2M1NA=='   -X POST   --data-binary @23.tgz   https://console.convox.com/apps/subscription-api-23/objects/23.tgz
+- curl -i   -H 'rack: wt/citationapi-playground'   -H 'Authorization: Basic Y29udm94OjliMGRjY2U1LTIwZTEtNDkzNC04NWJmLTgzZDgwMzEyN2M1NA=='   -X POST   'https://console.convox.com/apps/subscription-api-23/builds?url=object://subscription-api-23/23.tgz&manifest=docker-compose.yml'
+
+
+- curl -i -H 'rack: wt/citationapi-playground'   -H 'Authorization: Basic Y29udm94OjliMGRjY2U1LTIwZTEtNDkzNC04NWJmLTgzZDgwMzEyN2M1NA=='   -X POST   --data-binary @17.tgz   https://console.convox.com/apps/subscription-api-17/objects/17.tgz
+- curl -i -H 'rack: wt/citationapi-playground'   -H 'Authorization: Basic Y29udm94OjliMGRjY2U1LTIwZTEtNDkzNC04NWJmLTgzZDgwMzEyN2M1NA=='   -X POST   'https://console.convox.com/apps/subscription-api-17/builds?url=object://subscription-api-17/17.tgz&manifest=docker-compose.yml'
+
+'https://console.convox.com/apps/subscription-api-17/builds?url=object://subscription-api-17/17.tgz&manifest=docker-compose.yml'
+
+curl \
+  -H 'Content-Type: application/json' \
+  -X POST \
+  -d '{"app_name":"subscription-api", "rack:"wt/citationapi-playground","pr":23}' \
+  http://192.168.99.100/build; echo ''
+
+convox builds export BTYDWRMYEOU -a dd-agent --rack wt/citationapi2 | convox builds import -a dd-agent --rack wpt-production
